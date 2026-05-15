@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}{{ project.name }} – Tasks{% endblock %}
+{% block page_title %}{{ project.name }}{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+  <!-- Add Task Form -->
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-body p-4">
+        <h6 class="fw-semibold mb-3"><i class="bi bi-plus-circle me-1" style="color:#4f46e5"></i>Add Task</h6>
+        <form method="POST">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Title</label>
+            <input type="text" name="title" class="form-control" placeholder="Task title" required/>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Description</label>
+            <textarea name="description" class="form-control" rows="2" placeholder="Optional"></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Priority</label>
+            <select name="priority" class="form-select">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Due Date</label>
+            <input type="date" name="due_date" class="form-control"/>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Add Task</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tasks List -->
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h6 class="fw-semibold mb-0">Tasks ({{ tasks|length }})</h6>
+          <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left"></i> Back
+          </a>
+        </div>
+
+        {% if tasks %}
+          {% for t in tasks %}
+          <div class="border rounded-3 p-3 mb-3" style="background:{% if t.status == 'done' %}#f0fdf4{% else %}#fff{% endif %}">
+            <div class="d-flex justify-content-between align-items-start">
+              <div class="flex-grow-1">
+                <div class="fw-semibold {% if t.status == 'done' %}text-decoration-line-through text-muted{% endif %}">
+                  {{ t.title }}
+                </div>
+                {% if t.description %}
+                  <div class="text-muted mt-1" style="font-size:.82rem">{{ t.description }}</div>
+                {% endif %}
+                <div class="mt-2 d-flex flex-wrap gap-2 align-items-center">
+                  <span class="badge
+                    {% if t.status == 'done' %}badge-done
+                    {% elif t.status == 'in_progress' %}badge-progress
+                    {% else %}badge-todo{% endif %}">
+                    {{ t.status.replace('_',' ') }}
+                  </span>
+                  <span class="badge
+                    {% if t.priority == 'high' %}badge-high
+                    {% elif t.priority == 'low' %}badge-low
+                    {% else %}badge-medium{% endif %}">
+                    {{ t.priority }}
+                  </span>
+                  {% if t.due_date %}
+                    <span class="text-muted" style="font-size:.78rem">
+                      <i class="bi bi-calendar3"></i> {{ t.due_date }}
+                    </span>
+                  {% endif %}
+                </div>
+              </div>
+              <!-- Actions -->
+              <div class="d-flex gap-1 ms-2">
+                <a href="{{ url_for('edit_task', task_id=t.id) }}" class="btn btn-outline-primary btn-sm">
+                  <i class="bi bi-pencil"></i>
+                </a>
+                <form method="POST" action="{{ url_for('delete_task', task_id=t.id) }}"
+                      onsubmit="return confirm('Delete task?')">
+                  <input type="hidden" name="project_id" value="{{ project.id }}"/>
+                  <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
+                </form>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="text-center py-5 text-muted">
+            <i class="bi bi-inbox" style="font-size:2.5rem;color:#cbd5e1"></i>
+            <p class="mt-2">No tasks yet. Add your first task!</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

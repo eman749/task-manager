@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Dashboard – Task Manager{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Stats -->
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="stat-card" style="background:linear-gradient(135deg,#4f46e5,#7c3aed)">
+      <div style="font-size:.85rem;opacity:.8"><i class="bi bi-folder2"></i> Total Projects</div>
+      <div style="font-size:2.2rem;font-weight:700">{{ total_projects }}</div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="stat-card" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)">
+      <div style="font-size:.85rem;opacity:.8"><i class="bi bi-list-task"></i> Total Tasks</div>
+      <div style="font-size:2.2rem;font-weight:700">{{ total_tasks }}</div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="stat-card" style="background:linear-gradient(135deg,#10b981,#059669)">
+      <div style="font-size:.85rem;opacity:.8"><i class="bi bi-check-circle"></i> Done</div>
+      <div style="font-size:2.2rem;font-weight:700">{{ done_tasks }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <!-- Projects -->
+  <div class="col-lg-7">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="card-title mb-0 fw-semibold">My Projects</h5>
+          <a href="{{ url_for('add_project') }}" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-lg"></i> New Project
+          </a>
+        </div>
+
+        {% if projects %}
+          <div class="list-group list-group-flush">
+            {% for p in projects %}
+            <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+              <div>
+                <a href="{{ url_for('project_tasks', project_id=p.id) }}"
+                   class="fw-semibold text-decoration-none" style="color:#1e1b4b">
+                  <i class="bi bi-folder2-open me-1" style="color:#4f46e5"></i>{{ p.name }}
+                </a>
+                <div class="text-muted" style="font-size:.8rem">
+                  {{ p.task_count }} task{{ 's' if p.task_count != 1 }}
+                </div>
+              </div>
+              <form method="POST" action="{{ url_for('delete_project', project_id=p.id) }}"
+                    onsubmit="return confirm('Delete this project?')">
+                <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
+              </form>
+            </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="text-center py-5 text-muted">
+            <i class="bi bi-folder-x" style="font-size:2.5rem;color:#cbd5e1"></i>
+            <p class="mt-2 mb-0">No projects yet.</p>
+            <a href="{{ url_for('add_project') }}" class="btn btn-primary btn-sm mt-3">Create your first project</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Upcoming Tasks -->
+  <div class="col-lg-5">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title fw-semibold mb-3">Upcoming Tasks</h5>
+        {% if upcoming_tasks %}
+          {% for t in upcoming_tasks %}
+          <div class="mb-3 pb-3 border-bottom">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <div class="fw-semibold" style="font-size:.93rem">{{ t.title }}</div>
+                <div class="text-muted" style="font-size:.78rem">{{ t.project_name }}</div>
+              </div>
+              <span class="badge
+                {% if t.priority == 'high' %}badge-high
+                {% elif t.priority == 'low' %}badge-low
+                {% else %}badge-medium{% endif %}">
+                {{ t.priority }}
+              </span>
+            </div>
+            {% if t.due_date %}
+              <div class="mt-1" style="font-size:.78rem;color:#64748b">
+                <i class="bi bi-calendar3"></i> {{ t.due_date }}
+              </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="text-center py-4 text-muted">
+            <i class="bi bi-calendar-check" style="font-size:2rem;color:#cbd5e1"></i>
+            <p class="mt-2 mb-0">No upcoming tasks.</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

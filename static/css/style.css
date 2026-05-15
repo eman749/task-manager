@@ -1,0 +1,96 @@
+/* ============================================================
+   Task Manager – Shared Stylesheet
+   ============================================================ */
+
+/* ---------- CSS Variables ---------- */
+:root {
+  --primary:      #4f46e5;
+  --primary-dark: #3730a3;
+  --sidebar-w:    240px;
+}
+
+/* ---------- Base ---------- */
+body {
+  background: #f1f5f9;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  position: fixed; top: 0; left: 0;
+  width: var(--sidebar-w); height: 100vh;
+  background: #1e1b4b; color: #fff;
+  display: flex; flex-direction: column;
+  z-index: 100; padding: 0;
+}
+.sidebar-brand {
+  padding: 20px 24px;
+  font-size: 1.2rem; font-weight: 700;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+  color: #fff; text-decoration: none;
+  display: flex; align-items: center; gap: 10px;
+}
+.sidebar-brand i { color: #818cf8; font-size: 1.4rem; }
+.sidebar nav { flex: 1; padding: 16px 0; }
+.sidebar nav a {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 24px; color: #a5b4fc;
+  text-decoration: none; font-size: .93rem;
+  transition: all .15s;
+}
+.sidebar nav a:hover,
+.sidebar nav a.active {
+  background: rgba(255,255,255,.08); color: #fff;
+  border-right: 3px solid #818cf8;
+}
+.sidebar nav a i { font-size: 1.1rem; }
+.sidebar-footer {
+  padding: 16px 24px;
+  border-top: 1px solid rgba(255,255,255,.1);
+  font-size: .8rem; color: #6b7280;
+}
+
+/* ---------- Main layout ---------- */
+.main { margin-left: var(--sidebar-w); min-height: 100vh; }
+.topbar {
+  background: #fff; border-bottom: 1px solid #e2e8f0;
+  padding: 14px 28px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.topbar-title { font-size: 1.1rem; font-weight: 600; color: #1e1b4b; }
+.content { padding: 28px; }
+
+/* ---------- Cards ---------- */
+.card { border: none; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.stat-card { border-radius: 12px; padding: 20px 24px; color: #fff; }
+
+/* ---------- Badges ---------- */
+.badge-todo     { background: #e2e8f0; color: #475569; }
+.badge-progress { background: #fef3c7; color: #92400e; }
+.badge-done     { background: #dcfce7; color: #166534; }
+.badge-high     { background: #fee2e2; color: #991b1b; }
+.badge-medium   { background: #fef3c7; color: #92400e; }
+.badge-low      { background: #dcfce7; color: #166534; }
+
+/* ---------- Buttons ---------- */
+.btn-primary { background: var(--primary); border-color: var(--primary); }
+.btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+
+/* ---------- Auth pages ---------- */
+.auth-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+.auth-card {
+  background: #fff; border-radius: 16px;
+  padding: 40px 36px; width: 100%; max-width: 420px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.08);
+}
+.auth-logo { font-size: 1.6rem; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+.auth-logo i { margin-right: 8px; }
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79,70,229,.15);
+}
