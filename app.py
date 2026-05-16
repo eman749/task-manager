@@ -226,7 +226,11 @@ def edit_task(task_id):
 def delete_task(task_id):
     project_id = request.form.get('project_id')
     cur = mysql.connection.cursor()
-    cur.execute("DELETE FROM tasks WHERE id = %s", (task_id,))
+    cur.execute("""
+        DELETE tasks FROM tasks
+        JOIN projects p ON tasks.project_id = p.id
+        WHERE tasks.id = %s AND p.user_id = %s
+    """, (task_id, session['user_id']))
     mysql.connection.commit()
     cur.close()
     flash('Task deleted.', 'info')
