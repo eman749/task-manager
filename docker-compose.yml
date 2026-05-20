@@ -30,6 +30,7 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: 123456
       MYSQL_DB: task_management
+      MYSQL_PORT: 3306
     depends_on:
       db:
         condition: service_healthy
